@@ -28,13 +28,13 @@ def print_debug(*, prefix: str = None):
     return decorator
 
 
-def logger_object(path: str):
+def __logger_object(path: str):
     """Creates and return the logger object. Requires a path because it tries
     to create the path that you put in the `logging_debug` function, if it
     isn't created, no worries, it uses it no problem."""
     logger = logging.getLogger("CSJ-CONTROL-PROCESO")
     logger.setLevel(logging.INFO)
-    # chequeando y creando el archivo sino existe
+    # checking and creating the file if it doesn't exist.
     if os.path.isfile(f"{path}"):
         pass
     else:
@@ -43,9 +43,9 @@ def logger_object(path: str):
         # path_file = head_tail[1]
         os.makedirs(f"{path_dir}", exist_ok=True)
         open(f"{path}", "w").close()
-    # archivo donde se va a guardar el logger
+    # file where we are going to log
     logger_file = logging.FileHandler(f"{path}")
-    # formato del logger
+    # logger format
     logger_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     formatter = logging.Formatter(logger_format)
     logger_file.setFormatter(formatter)
@@ -71,7 +71,7 @@ def logging_debug(*, prefix: str = None, path: str = "./logs/error.log"):
     def decorator(function):
         @wraps(function)
         def wrapper(*args, **kwargs):
-            logger = logger_object(path)
+            logger = __logger_object(path)
             try:
                 return function(*args, **kwargs)
             except Exception:
