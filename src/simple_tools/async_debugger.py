@@ -1,31 +1,15 @@
-"""Decorator for debugging messages using the `print` statement or logging the
-infomation in a .log file"""
+"""Decorator for debugging messages using the logging module of async functions
+in a .log file"""
 
 from functools import wraps
 import logging
 import os
+import concurrent.futures
 
 
-def print_debug(*, prefix: str = None):
-    """You can only debug with the `print` statement, that's the only way. So
-    this debugging tool tries to execute the function, but in casa there is an
-    error, you can search for the `prefix` and the function name to catch the
-    error.
-
-    The function requires named arguments, not positional. If you use positons
-    on a big team, they will hate you and I learned through that hate, so you
-    don't have to.
-
-    prefix -> String"""
-    def decorator(function):
-        msg = prefix + function.__qualname__
-
-        @wraps(function)
-        def wrapper(*args, **kwargs):
-            print(msg)
-            return function(*args, **kwargs)
-        return wrapper
-    return decorator
+# keeping the workers = 1 ensures that we log in the order that the functions
+# are called
+executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
 
 
 def __logger_object(path: str, logger_name:str):
@@ -55,7 +39,7 @@ def __logger_object(path: str, logger_name:str):
     return logger
 
 
-def logging_debug(
+def async_logging_debug(
     *,
     prefix: str = None,
     path: str = "./logs/error.log",
