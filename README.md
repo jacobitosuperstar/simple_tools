@@ -1,6 +1,6 @@
 # simple_tools
 
-Simplifield tools to ease the use of the more advanced tools of Python.
+Simplifield tools to ease the use of the more common tools of Python.
 
 The point of the library is to ease the use of tools that aren't in most of the
 beginner proyects, that are making their way into entry level jobs.
